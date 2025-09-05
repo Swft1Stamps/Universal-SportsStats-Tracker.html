@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universal Sports Stats Tracker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+```
+    body {
+        font-family: 'Arial', sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        color: white;
+    }
+
+    .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .header {
+        text-align: center;
+        margin-bottom: 40px;
+        animation: fadeInDown 1s ease-out;
+    }
+
+    .header h1 {
+        font-size: 3.5em;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        background: linear-gradient(45deg, #ff6b35, #f7931e, #4ecdc4);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .header p {
+        font-size: 1.3em;
+        opacity: 0.9;
+    }
+
+    .sport-selector {
+        background: rgba(255,255,255,0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 25px;
+        margin-bottom: 30px;
+        animation: fadeInUp 1s ease-out 0.1s both;
+    }
+
+    .sport-tabs {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .sport-tab {
+        padding: 12px 16px;
+        background: rgba(255,255,255,0.1);
+        border: 2px solid transparent;
+        border-radius: 25px;
+        cursor: pointer;
+        text-align: center;
+        transition: all 0.3s ease;
+        font-weight: bold;
+        font-size: 0.9em;
+    }
+
+    .sport-tab:hover {
+        background: rgba(255,255,255,0.2);
+        transform: translateY(-2px);
+    }
+
+    .sport-tab.active {
+        background: linear-gradient(45deg, #ff6b35, #f7931e);
+        border-color: #ff6b35;
+        box-shadow: 0 4px 15px rgba(255,107,53,0.4);
+    }
+
+    .search-section {
+        background: rgba(255,255,255,0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 30px;
+        margin-bottom: 30px;
+        animation: fadeInUp 1s ease-out 0.2s both;
+    }
+
+    .search-container {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+
+    .search-input {
+        flex: 1;
+        min-width: 250px;
+        padding: 15px 20px;
+        border: none;
+        border-radius: 50px;
+        font-size: 16px;
+        background: rgba(255,255,255,0.9);
+        transition: all 0.3s ease;
+    }
+
+    .search-input:focus {
+        outline: none;
+        box-shadow: 0 0 20px rgba(255,255,255,0.3);
+        transform: translateY(-2px);
+    }
+
+    .search-btn {
+        padding: 15px 30px;
+        background: linear-gradient(45deg, #ff6b35, #f7931e);
+        border: none;
+        border-radius: 50px;
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    .search-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(255,107,53,0.4);
+    }
+
+    .search-btn:disabled {
+        background: #666;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .loading {
+        text-align: center;
+        padding: 40px;
+        font-size: 1.2em;
+    }
+
+    .spinner {
+        border: 4px solid rgba(255,255,255,0.3);
+        border-radius: 50%;
+        border-top: 4px solid #fff;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 20px;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .error {
+        background: rgba(255,59,48,0.2);
+        border: 2px solid #ff3b30;
+        border-radius: 15px;
+        padding: 20px;
+        text-align: center;
+        margin: 20px 0;
+    }
+
+    .player-card {
+        background: rgba(255,255,255,0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 30px;
+        margin-bottom: 30px;
+        animation: slideInUp 0.6s ease-out;
+        border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .player-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .player-info h2 {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+    }
+
+    .player-details {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 10px;
+        opacity: 0.9;
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    .stat-category {
+        background: rgba(255,255,255,0.05);
+        border-radius: 15px;
+        padding: 20px;
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .splits-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    .split-card {
+        background: rgba(255,255,255,0.05);
+        border-radius: 15px;
+        padding: 20px;
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .split-card.home {
+        border-left: 4px solid #ff6b35;
+    }
+
+    .split-card.away {
+        border-left: 4px solid #4ecdc4;
+    }
+
+    .stat-category h3 {
+        color: #ff6b35;
+        margin-bottom: 15px;
+        font-size: 1.3em;
+        text-align: center;
+    }
+
+    .stat-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .stat-row:last-child {
+        border-bottom: none;
+    }
+
+    .stat-label {
+        font-weight: bold;
+        opacity: 0.8;
+    }
+
+    .stat-value {
+        font-weight: bold;
+        color: #fff;
+    }
+
+    .matchup-container {
+        margin-top: 30px;
+    }
+
+    .matchup-search {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+
+    .matchup-input {
+        flex: 1;
+        min-width: 200px;
+        padding: 12px 18px;
+        border: none;
+        border-radius: 25px;
+        font-size: 14px;
+        background: rgba(255,255,255,0.1);
+        color: white;
+        border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .matchup-input::placeholder {
+        color: rgba(255,255,255,0.7);
+    }
+
+    .matchup-input:focus {
+        outline: none;
+        box-shadow: 0 0 15px rgba(255,255,255,0.2);
+        background: rgba(255,255,255,0.15);
+    }
+
+    .matchup-btn {
+        padding: 12px 24px;
+        background: linear-gradient(45deg, #4ecdc4, #44a08d);
+        border: none;
+        border-radius: 25px;
+        color: white;
+        font-size: 14px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .matchup-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(78,205,196,0.4);
+    }
+
+    .matchup-history {
+        display: grid;
+        gap: 15px;
+    }
+
+    .matchup-card {
+        background: rgba(255,255,255,0.05);
+        border-radius: 12px;
+        padding: 18px;
+        border-left: 4px solid #ff6b35;
+        transition: all 0.3s ease;
+    }
+
+    .matchup-card:hover {
+        background: rgba(255,255,255,0.1);
+        transform: translateX(5px);
+    }
+
+    .matchup-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .opponent-name {
+        font-size: 1.2em;
+        font-weight: bold;
+        color: #ff6b35;
+    }
+
+    .opponent-team {
+        color: rgba(255,255,255,0.7);
+        font-size: 0.9em;
+    }
+
+    .matchup-summary {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 12px;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .summary-stat {
+        text-align: center;
+    }
+
+    .summary-stat .value {
+        font-size: 1.3em;
+        font-weight: bold;
+        color: white;
+        display: block;
+    }
+
+    .summary-stat .label {
+        font-size: 0.8em;
+        color: rgba(255,255,255,0.7);
+    }
+
+    .matchup-details {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+        gap: 8px;
+        font-size: 0.9em;
+    }
+
+    .matchup-stat {
+        text-align: center;
+        padding: 5px;
+    }
+
+    .last-faced {
+        text-align: right;
+        font-size: 0.8em;
+        color: rgba(255,255,255,0.6);
+        margin-top: 10px;
+    }
+
+    .no-matchups {
+        text-align: center;
+        padding: 30px;
+        color: rgba(255,255,255,0.7);
+        font-style: italic;
+    }
+
+    .fantasy-section {
+        margin-top: 30px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 20px;
+    }
+
+    .fantasy-card {
+        background: linear-gradient(135deg, rgba(255,107,53,0.1), rgba(78,205,196,0.1));
+        border-radius: 20px;
+        padding: 25px;
+        border: 2px solid rgba(255,107,53,0.3);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .fantasy-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #ff6b35, #f7931e, #4ecdc4);
+        animation: shimmer 3s infinite;
+    }
+
+    @keyframes shimmer {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(100%); }
+    }
+
+    .fantasy-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .fantasy-title {
+        font-size: 1.3em;
+        font-weight: bold;
+        color: #ff6b35;
+    }
+
+    .fantasy-score {
+        font-size: 2em;
+        font-weight: bold;
+        color: white;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .score-label {
+        font-size: 0.8em;
+        color: rgba(255,255,255,0.7);
+        text-align: center;
+    }
+
+    .game-info {
+        background: rgba(255,255,255,0.05);
+        border-radius: 10px;
+        padding: 15px;
+        margin-bottom: 15px;
+    }
+
+    .game-date {
+        color: #4ecdc4;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .opponent {
+        color: rgba(255,255,255,0.9);
+        font-size: 1.1em;
+    }
+
+    .fantasy-breakdown {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+        gap: 10px;
+        margin-top: 15px;
+    }
+
+    .breakdown-item {
+        text-align: center;
+        padding: 8px;
+        background: rgba(255,255,255,0.05);
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .breakdown-item:hover {
+        background: rgba(255,255,255,0.1);
+        transform: translateY(-2px);
+    }
+
+    .breakdown-value {
+        font-size: 1.2em;
+        font-weight: bold;
+        color: white;
+    }
+
+    .breakdown-label {
+        font-size: 0.7em;
+        color: rgba(255,255,255,0.6);
+        margin-top: 2px;
+    }
+
+    .recent-games {
+        margin-top: 20px;
+    }
+
+    .recent-games h4 {
+        color: #4ecdc4;
+        margin-bottom: 15px;
+        font-size: 1.1em;
+    }
+
+    .game-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        max-height: 200px;
+        overflow-y: auto;
+    }
+
+    .game-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: rgba(255,255,255,0.05);
+        border-radius: 8px;
+        padding: 10px;
+        transition: all 0.3s ease;
+    }
+
+    .game-item:hover {
+        background: rgba(255,255,255,0.1);
+        transform: translateX(5px);
+    }
+
+    .game-item-date {
+        font-size: 0.9em;
+        color: rgba(255,255,255,0.7);
+    }
+
+    .game-item-score {
+        font-weight: bold;
+        color: #ff6b35;
+        font-size: 1.1em;
+    }
+
+    .fantasy-scoring-guide {
+        margin-top: 20px;
+        background: rgba(255,255,255,0.05);
+        border-radius: 10px;
+        padding: 15px;
+    }
+
+    .scoring-guide-title {
+        color: #4ecdc4;
+        font-weight: bold;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    .scoring-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        gap: 8px;
+        font-size: 0.85em;
+    }
+
+    .scoring-item {
+        text-align: center;
+        padding: 5px;
+    }
+
+    .scoring-points {
+        font-weight: bold;
+        color: #ff6b35;
+    }
+
+    .suggestions {
+        margin-top: 20px;
+    }
+
+    .suggestions h3 {
+        margin-bottom: 15px;
+        color: #ff6b35;
+    }
+
+    .suggestion-pills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .suggestion-pill {
+        background: rgba(255,255,255,0.1);
+        border: 1px solid rgba(255,255,255,0.2);
+        border-radius: 25px;
+        padding: 8px 16px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 14px;
+    }
+
+    .suggestion-pill:hover {
+        background: rgba(255,107,53,0.3);
+        transform: translateY(-2px);
+    }
+
+    @keyframes fadeInDown {
+        from { opacity: 0; transform: translateY(-30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideInUp {
+        from { opacity: 0; transform: translateY(50px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+        .container {
+            padding: 10px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+        }
+
+        .search-container {
+            flex-direction: column;
+        }
+
+        .search-input {
+            min-width: auto;
+        }
+
+        .player-info h2 {
+            font-size: 2em;
+        }
+
+        .splits-container {
+            grid-template-columns: 1fr;
+        }
+
+        .sport-tabs {
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        }
+    }
+</style>
+```
+
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌍 Universal Sports Stats</h1>
+            <p>Track any athlete from any sport worldwide with advanced analytics</p>
+        </div>
+
+```
+    <div class="sport-selector">
+        <div class="sport-tabs" id="sportTabs">
+            <div class="sport-tab active" data-sport="mlb">⚾ MLB</div>
+            <div class="sport-tab" data-sport="nba">🏀 NBA</div>
+            <div class="sport-tab" data-sport="nfl">🏈 NFL</div>
+            <div class="sport-tab" data-sport="nhl">🏒 NHL</div>
+            <div class="sport-tab" data-sport="soccer">⚽ Soccer</div>
+            <div class="sport-tab" data-sport="tennis">🎾 Tennis</div>
+            <div class="sport-tab" data-sport="golf">⛳ Golf</div>
+            <div class="sport-tab" data-sport="f1">🏎️ F1</div>
+            <div class="sport-tab" data-sport="cricket">🏏 Cricket</div>
+            <div class="sport-tab" data-sport="rugby">🏉 Rugby</div>
+            <div class="sport-tab" data-sport="basketball_intl">🌍 Basketball</div>
+            <div class="sport-tab" data-sport="football_intl">⚽ Football</div>
+        </div>
+    </div>
+
+    <div class="search-section">
+        <div class="search-container">
+            <input type="text" id="playerInput" class="search-input" placeholder="Enter player name...">
+            <button id="searchBtn" class="search-btn">Search Player</button>
+        </div>
+
+        <div class="suggestions" id="suggestions">
+            <h3 id="suggestionsTitle">Popular MLB Players:</h3>
+            <div class="suggestion-pills" id="suggestionPills">
+                <!-- Dynamic content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <div id="results"></div>
+</div>
+
+<script>
+    class UniversalSportsApp {
+        constructor() {
+            this.currentSport = 'mlb';
+            this.sportConfigs = this.initializeSportConfigs();
+            this.init();
+        }
+
+        initializeSportConfigs() {
+            return {
+                mlb: {
+                    name: 'MLB',
+                    emoji: '⚾',
+                    popularPlayers: ['Aaron Judge', 'Mookie Betts', 'Ronald Acuña Jr.', 'Shohei Ohtani', 'Mike Trout', 'Juan Soto'],
+                    fantasyScoring: {
+                        single: 1.0, double: 2.0, triple: 3.0, hr: 4.0, rbi: 1.0, run: 1.0, bb: 0.5, sb: 2.0, hbp: 0.5
+                    },
+                    statCategories: ['Batting', 'Pitching', 'Advanced Batting']
+                },
+                nba: {
+                    name: 'NBA',
+                    emoji: '🏀',
+                    popularPlayers: ['LeBron James', 'Stephen Curry', 'Luka Dončić', 'Giannis Antetokounmpo', 'Nikola Jokić', 'Jayson Tatum'],
+                    fantasyScoring: {
+                        point: 1.0, rebound: 1.2, assist: 1.5, steal: 3.0, block: 3.0, turnover: -1.0, fgm: 0.5, ftm: 0.5
+                    },
+                    statCategories: ['Scoring', 'Rebounds & Assists', 'Defense']
+                },
+                nfl: {
+                    name: 'NFL',
+                    emoji: '🏈',
+                    popularPlayers: ['Josh Allen', 'Patrick Mahomes', 'Lamar Jackson', 'Christian McCaffrey', 'Cooper Kupp', 'Travis Kelce'],
+                    fantasyScoring: {
+                        pass_yd: 0.04, pass_td: 4.0, rush_yd: 0.1, rush_td: 6.0, rec_yd: 0.1, rec_td: 6.0, reception: 1.0, int: -1.0
+                    },
+                    statCategories: ['Passing', 'Rushing', 'Receiving']
+                },
+                nhl: {
+                    name: 'NHL',
+                    emoji: '🏒',
+                    popularPlayers: ['Connor McDavid', 'Nathan MacKinnon', 'Auston Matthews', 'Leon Draisaitl', 'Erik Karlsson', 'David Pastrnak'],
+                    fantasyScoring: {
+                        goal: 3.0, assist: 2.0, powerplay_point: 0.5, shot: 0.5, hit: 0.1, block: 0.5
+                    },
+                    statCategories: ['Scoring', 'Goaltending', 'Advanced Stats']
+                },
+                soccer: {
+                    name: 'Soccer',
+                    emoji: '⚽',
+                    popularPlayers: ['Lionel Messi', 'Kylian Mbappé', 'Erling Haaland', 'Vinícius Jr.', 'Mohamed Salah', 'Kevin De Bruyne'],
+                    fantasyScoring: {
+                        goal: 4.0, assist: 3.0, clean_sheet: 1.0, save: 0.5, yellow_card: -0.5, red_card: -3.0
+                    },
+                    statCategories: ['Attack', 'Defense', 'Goalkeeping']
+                },
+                tennis: {
+                    name: 'Tennis',
+                    emoji: '🎾',
+                    popularPlayers: ['Novak Djokovic', 'Carlos Alcaraz', 'Jannik Sinner', 'Iga Świątek', 'Aryna Sabalenka', 'Coco Gauff'],
+                    fantasyScoring: {
+                        match_win: 10.0, set_win: 3.0, ace: 0.5, winner: 0.3, break_point_won: 1.0
+                    },
+                    statCategories: ['Match Stats', 'Serve Stats', 'Return Stats']
+                },
+                golf: {
+                    name: 'Golf',
+                    emoji: '⛳',
+                    popularPlayers: ['Scottie Scheffler', 'Rory McIlroy', 'Jon Rahm', 'Viktor Hovland', 'Xander Schauffele', 'Collin Morikawa'],
+                    fantasyScoring: {
+                        birdie: 3.0, eagle: 8.0, bogey: -0.5, double_bogey: -1.0, made_cut: 5.0, top_10: 5.0
+                    },
+                    statCategories: ['Scoring', 'Driving', 'Putting']
+                },
+                f1: {
+                    name: 'Formula 1',
+                    emoji: '🏎️',
+                    popularPlayers: ['Max Verstappen', 'Lewis Hamilton', 'Charles Leclerc', 'Lando Norris', 'George Russell', 'Oscar Piastri'],
+                    fantasyScoring: {
+                        position_1: 25.0, position_2: 15.0, position_3: 10.0, fastest_lap: 2.0, pole_position: 3.0
+                    },
+                    statCategories: ['Race Results', 'Qualifying', 'Season Stats']
+                },
+                cricket: {
+                    name: 'Cricket',
+                    emoji: '🏏',
+                    popularPlayers: ['Virat Kohli', 'Babar Azam', 'Kane Williamson', 'Steve Smith', 'Joe Root', 'Pat Cummins'],
+                    fantasyScoring: {
+                        run: 1.0, four: 1.0, six: 2.0, wicket: 25.0, catch: 8.0, stumping: 12.0
+                    },
+                    statCategories: ['Batting', 'Bowling', 'Fielding']
+                },
+                rugby: {
+                    name: 'Rugby',
+                    emoji: '🏉',
+                    popularPlayers: ['Antoine Dupont', 'Ardie Savea', 'Cheslin Kolbe', 'Maro Itoje', 'Johnny Sexton', 'Marcus Smith'],
+                    fantasyScoring: {
+                        try: 5.0, conversion: 2.0, penalty: 3.0, tackle: 0.2, lineout_won: 1.0
+                    },
+                    statCategories: ['Attack', 'Defense', 'Kicking']
+                },
+                basketball_intl: {
+                    name: 'International Basketball',
+                    emoji: '🌍',
+                    popularPlayers: ['Luka Dončić', 'Nikola Jokić', 'Giannis Antetokounmpo', 'Rudy Gobert', 'Dennis Schröder', 'Evan Fournier'],
+                    fantasyScoring: {
+                        point: 1.0, rebound: 1.2, assist: 1.5, steal: 3.0, block: 3.0
+                    },
+                    statCategories: ['Offense', 'Defense', 'Efficiency']
+                },
+                football_intl: {
+                    name: 'International Football',
+                    emoji: '⚽',
+                    popularPlayers: ['Kylian Mbappé', 'Erling Haaland', 'Pedri', 'Jude Bellingham', 'Florian Wirtz', 'Gavi'],
+                    fantasyScoring: {
+                        goal: 4.0, assist: 3.0, clean_sheet: 1.0, save: 0.5
+                    },
+                    statCategories: ['Attack', 'Midfield', 'Defense']
+                }
+            };
+        }
+
+        init() {
+            this.bindEvents();
+            this.updateSuggestions();
+        }
+
+        bindEvents() {
+            const searchBtn = document.getElementById('searchBtn');
+            const playerInput = document.getElementById('playerInput');
+            const sportTabs = document.querySelectorAll('.sport-tab');
+
+            searchBtn.addEventListener('click', () => this.searchPlayer());
+            
+            playerInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    this.searchPlayer();
+                }
+            });
+
+            sportTabs.forEach(tab => {
+                tab.addEventListener('click', (e) => {
+                    const sport = e.target.dataset.sport;
+                    this.switchSport(sport);
+                });
+            });
+
+            // Delegate event for suggestion pills
+            document.addEventListener('click', (e) => {
+                if (e.target.classList.contains('suggestion-pill')) {
+                    const playerName = e.target.dataset.player;
+                    playerInput.value = playerName;
+                    this.searchPlayer();
+                }
+            });
+        }
+
+        switchSport(sport) {
+            // Update active tab
+            document.querySelectorAll('.sport-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelector(`[data-sport="${sport}"]`).classList.add('active');
+
+            // Update current sport
+            this.currentSport = sport;
+            
+            // Update suggestions
+            this.updateSuggestions();
+            
+            // Clear results
+            document.getElementById('results').innerHTML = '';
+            
+            // Update placeholder
+            const config = this.sportConfigs[sport];
+            document.getElementById('playerInput').placeholder = `Enter ${config.name} player name...`;
+        }
+
+        updateSuggestions() {
+            const config = this.sportConfigs[this.currentSport];
+            const suggestionsTitle = document.getElementById('suggestionsTitle');
+            const suggestionPills = document.getElementById('suggestionPills');
+
+            suggestionsTitle.textContent = `Popular ${config.name} Players:`;
+            
+            suggestionPills.innerHTML = config.popularPlayers.map(player => 
+                `<span class="suggestion-pill" data-player="${player}">${player}</span>`
+            ).join('');
+        }
+
+        async searchPlayer() {
+            const playerName = document.getElementById('playerInput').value.trim();
+            const resultsDiv = document.getElementById('results');
+            const searchBtn = document.getElementById('searchBtn');
+
+            if (!playerName) {
+                this.showError('Please enter a player name');
+                return;
+            }
+
+            // Show loading state
+            searchBtn.disabled = true;
+            searchBtn.textContent = 'Searching...';
+            resultsDiv.innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Searching for ${playerName} in ${this.sportConfigs[this.currentSport].name}...</p>
+                </div>
+            `;
+
+            try {
+                await this.simulateAPICall();
+                this.displayPlayerStats(this.getSamplePlayerData(playerName));
+            } catch (error) {
+                this.showError(`Error fetching player data: ${error.message}`);
+            } finally {
+                searchBtn.disabled = false;
+                searchBtn.textContent = 'Search Player';
+            }
+        }
+
+        async simulateAPICall() {
+            return new Promise(resolve => setTimeout(resolve, 1500));
+        }
+
+        getSamplePlayerData(playerName) {
+            const config = this.sportConfigs[this.currentSport];
+            
+            // Generate sport-specific sample data
+            const baseData = {
+                name: playerName,
+                sport: this.currentSport,
+                team: this.getRandomTeam(),
+                position: this.getRandomPosition(),
+                jerseyNumber: Math.floor(Math.random() * 99) + 1,
+                age: Math.floor(Math.random() * 15) + 20,
+                height: this.getRandomHeight(),
+                weight: this.getRandomWeight()
+            };
+
+            // Add sport-specific stats
+            switch(this.currentSport) {
+                case 'mlb':
+                    return { ...baseData, stats: this.getMLBStats() };
+                case 'nba':
+                    return { ...baseData, stats: this.getNBAStats() };
+                case 'nfl':
+                    return { ...baseData, stats: this.getNFLStats() };
+                case 'nhl':
+                    return { ...baseData, stats: this.getNHLStats() };
+                case 'soccer':
+                case 'football_intl':
+                    return { ...baseData, stats: this.getSoccerStats() };
+                case 'tennis':
+                    return { ...baseData, stats: this.getTennisStats() };
+                case 'golf':
+                    return { ...baseData, stats: this.getGolfStats() };
+                case 'f1':
+                    return { ...baseData, stats: this.getF1Stats() };
+                case 'cricket':
+                    return { ...baseData, stats: this.getCricketStats() };
+                case 'rugby':
+                    return { ...baseData, stats: this.getRugbyStats() };
+                case 'basketball_intl':
+                    return { ...baseData, stats: this.getNBAStats() }; // Similar to NBA
+                default:
+                    return { ...baseData, stats: this.getMLBStats() };
+            }
+        }
+
+        getRandomTeam() {
+            const teams = {
+                mlb: ['New York Yankees', 'Los Angeles Dodgers', 'Boston Red Sox', 'Atlanta Braves'],
+                nba: ['Los Angeles Lakers', 'Golden State Warriors', 'Miami Heat', 'Boston Celtics'],
+                nfl: ['Kansas City Chiefs', 'Buffalo Bills', 'Dallas Cowboys', 'Green Bay Packers'],
+                nhl: ['Toronto Maple Leafs', 'Montreal Canadiens', 'Boston Bruins', 'Tampa Bay Lightning'],
+                soccer: ['Manchester City', 'Real Madrid', 'Barcelona', 'Bayern Munich'],
+                tennis: ['Professional Circuit', 'ATP Tour', 'WTA Tour'],
+                golf: ['PGA Tour', 'European Tour'],
+                f1: ['Red Bull Racing', 'Mercedes', 'Ferrari', 'McLaren'],
+                cricket: ['India', 'Australia', 'England', 'Pakistan'],
+                rugby: ['France', 'New Zealand', 'South Africa', 'England'],
+                basketball_intl: ['Real Madrid', 'Barcelona', 'CSKA Moscow', 'Fenerbahçe'],
+                football_intl: ['France', 'Brazil', 'Argentina', 'Spain']
+            };
+            const teamList = teams[this.currentSport] || teams.mlb;
+            return teamList[Math.floor(Math.random() * teamList.length)];
+        }
+
+        getRandomPosition() {
+            const positions = {
+                mlb: ['CF', 'RF', 'LF', 'SS', 'C', '1B', '2B', '3B', 'P'],
+                nba: ['PG', 'SG', 'SF', 'PF', 'C'],
+                nfl: ['QB', 'RB', 'WR', 'TE', 'K', 'DEF'],
+                nhl: ['C', 'LW', 'RW', 'D', 'G'],
+                soccer: ['GK', 'CB', 'FB', 'CM', 'W', 'ST'],
+                tennis: ['Singles', 'Doubles'],
+                golf: ['Professional'],
+                f1: ['Driver'],
+                cricket: ['Bat
+```
