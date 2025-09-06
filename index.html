@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Universal Sports Stats Tracker</title>
+    <title>Complete Universal Sports Stats Tracker</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -73,6 +74,7 @@
         transition: all 0.3s ease;
         font-weight: bold;
         font-size: 0.9em;
+        user-select: none;
     }
 
     .sport-tab:hover {
@@ -110,6 +112,7 @@
         border-radius: 50px;
         font-size: 16px;
         background: rgba(255,255,255,0.9);
+        color: #333;
         transition: all 0.3s ease;
     }
 
@@ -267,144 +270,6 @@
         color: #fff;
     }
 
-    .matchup-container {
-        margin-top: 30px;
-    }
-
-    .matchup-search {
-        display: flex;
-        gap: 15px;
-        margin-bottom: 20px;
-        flex-wrap: wrap;
-    }
-
-    .matchup-input {
-        flex: 1;
-        min-width: 200px;
-        padding: 12px 18px;
-        border: none;
-        border-radius: 25px;
-        font-size: 14px;
-        background: rgba(255,255,255,0.1);
-        color: white;
-        border: 1px solid rgba(255,255,255,0.2);
-    }
-
-    .matchup-input::placeholder {
-        color: rgba(255,255,255,0.7);
-    }
-
-    .matchup-input:focus {
-        outline: none;
-        box-shadow: 0 0 15px rgba(255,255,255,0.2);
-        background: rgba(255,255,255,0.15);
-    }
-
-    .matchup-btn {
-        padding: 12px 24px;
-        background: linear-gradient(45deg, #4ecdc4, #44a08d);
-        border: none;
-        border-radius: 25px;
-        color: white;
-        font-size: 14px;
-        font-weight: bold;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-
-    .matchup-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 15px rgba(78,205,196,0.4);
-    }
-
-    .matchup-history {
-        display: grid;
-        gap: 15px;
-    }
-
-    .matchup-card {
-        background: rgba(255,255,255,0.05);
-        border-radius: 12px;
-        padding: 18px;
-        border-left: 4px solid #ff6b35;
-        transition: all 0.3s ease;
-    }
-
-    .matchup-card:hover {
-        background: rgba(255,255,255,0.1);
-        transform: translateX(5px);
-    }
-
-    .matchup-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 12px;
-        flex-wrap: wrap;
-        gap: 10px;
-    }
-
-    .opponent-name {
-        font-size: 1.2em;
-        font-weight: bold;
-        color: #ff6b35;
-    }
-
-    .opponent-team {
-        color: rgba(255,255,255,0.7);
-        font-size: 0.9em;
-    }
-
-    .matchup-summary {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 12px;
-        flex-wrap: wrap;
-        gap: 15px;
-    }
-
-    .summary-stat {
-        text-align: center;
-    }
-
-    .summary-stat .value {
-        font-size: 1.3em;
-        font-weight: bold;
-        color: white;
-        display: block;
-    }
-
-    .summary-stat .label {
-        font-size: 0.8em;
-        color: rgba(255,255,255,0.7);
-    }
-
-    .matchup-details {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-        gap: 8px;
-        font-size: 0.9em;
-    }
-
-    .matchup-stat {
-        text-align: center;
-        padding: 5px;
-    }
-
-    .last-faced {
-        text-align: right;
-        font-size: 0.8em;
-        color: rgba(255,255,255,0.6);
-        margin-top: 10px;
-    }
-
-    .no-matchups {
-        text-align: center;
-        padding: 30px;
-        color: rgba(255,255,255,0.7);
-        font-style: italic;
-    }
-
     .fantasy-section {
         margin-top: 30px;
         display: grid;
@@ -483,36 +348,35 @@
         font-size: 1.1em;
     }
 
-    .fantasy-breakdown {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    .suggestions {
+        margin-top: 20px;
+    }
+
+    .suggestions h3 {
+        margin-bottom: 15px;
+        color: #ff6b35;
+    }
+
+    .suggestion-pills {
+        display: flex;
+        flex-wrap: wrap;
         gap: 10px;
-        margin-top: 15px;
     }
 
-    .breakdown-item {
-        text-align: center;
-        padding: 8px;
-        background: rgba(255,255,255,0.05);
-        border-radius: 8px;
-        transition: all 0.3s ease;
-    }
-
-    .breakdown-item:hover {
+    .suggestion-pill {
         background: rgba(255,255,255,0.1);
+        border: 1px solid rgba(255,255,255,0.2);
+        border-radius: 25px;
+        padding: 8px 16px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 14px;
+        user-select: none;
+    }
+
+    .suggestion-pill:hover {
+        background: rgba(255,107,53,0.3);
         transform: translateY(-2px);
-    }
-
-    .breakdown-value {
-        font-size: 1.2em;
-        font-weight: bold;
-        color: white;
-    }
-
-    .breakdown-label {
-        font-size: 0.7em;
-        color: rgba(255,255,255,0.6);
-        margin-top: 2px;
     }
 
     .recent-games {
@@ -590,36 +454,6 @@
         color: #ff6b35;
     }
 
-    .suggestions {
-        margin-top: 20px;
-    }
-
-    .suggestions h3 {
-        margin-bottom: 15px;
-        color: #ff6b35;
-    }
-
-    .suggestion-pills {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-    }
-
-    .suggestion-pill {
-        background: rgba(255,255,255,0.1);
-        border: 1px solid rgba(255,255,255,0.2);
-        border-radius: 25px;
-        padding: 8px 16px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        font-size: 14px;
-    }
-
-    .suggestion-pill:hover {
-        background: rgba(255,107,53,0.3);
-        transform: translateY(-2px);
-    }
-
     @keyframes fadeInDown {
         from { opacity: 0; transform: translateY(-30px); }
         to { opacity: 1; transform: translateY(0); }
@@ -678,25 +512,25 @@
 ```
     <div class="sport-selector">
         <div class="sport-tabs" id="sportTabs">
-            <div class="sport-tab active" data-sport="mlb">⚾ MLB</div>
-            <div class="sport-tab" data-sport="nba">🏀 NBA</div>
-            <div class="sport-tab" data-sport="nfl">🏈 NFL</div>
-            <div class="sport-tab" data-sport="nhl">🏒 NHL</div>
-            <div class="sport-tab" data-sport="soccer">⚽ Soccer</div>
-            <div class="sport-tab" data-sport="tennis">🎾 Tennis</div>
-            <div class="sport-tab" data-sport="golf">⛳ Golf</div>
-            <div class="sport-tab" data-sport="f1">🏎️ F1</div>
-            <div class="sport-tab" data-sport="cricket">🏏 Cricket</div>
-            <div class="sport-tab" data-sport="rugby">🏉 Rugby</div>
-            <div class="sport-tab" data-sport="basketball_intl">🌍 Basketball</div>
-            <div class="sport-tab" data-sport="football_intl">⚽ Football</div>
+            <div class="sport-tab active" onclick="switchSport('mlb')" data-sport="mlb">⚾ MLB</div>
+            <div class="sport-tab" onclick="switchSport('nba')" data-sport="nba">🏀 NBA</div>
+            <div class="sport-tab" onclick="switchSport('nfl')" data-sport="nfl">🏈 NFL</div>
+            <div class="sport-tab" onclick="switchSport('nhl')" data-sport="nhl">🏒 NHL</div>
+            <div class="sport-tab" onclick="switchSport('soccer')" data-sport="soccer">⚽ Soccer</div>
+            <div class="sport-tab" onclick="switchSport('tennis')" data-sport="tennis">🎾 Tennis</div>
+            <div class="sport-tab" onclick="switchSport('golf')" data-sport="golf">⛳ Golf</div>
+            <div class="sport-tab" onclick="switchSport('f1')" data-sport="f1">🏎️ F1</div>
+            <div class="sport-tab" onclick="switchSport('cricket')" data-sport="cricket">🏏 Cricket</div>
+            <div class="sport-tab" onclick="switchSport('rugby')" data-sport="rugby">🏉 Rugby</div>
+            <div class="sport-tab" onclick="switchSport('basketball_intl')" data-sport="basketball_intl">🌍 Basketball</div>
+            <div class="sport-tab" onclick="switchSport('football_intl')" data-sport="football_intl">⚽ Football</div>
         </div>
     </div>
 
     <div class="search-section">
         <div class="search-container">
-            <input type="text" id="playerInput" class="search-input" placeholder="Enter player name...">
-            <button id="searchBtn" class="search-btn">Search Player</button>
+            <input type="text" id="playerInput" class="search-input" placeholder="Enter player name..." onkeypress="handleKeyPress(event)">
+            <button id="searchBtn" class="search-btn" onclick="searchPlayer()">Search Player</button>
         </div>
 
         <div class="suggestions" id="suggestions">
@@ -711,302 +545,941 @@
 </div>
 
 <script>
-    class UniversalSportsApp {
-        constructor() {
-            this.currentSport = 'mlb';
-            this.sportConfigs = this.initializeSportConfigs();
-            this.init();
-        }
+    // Global variables
+    let currentSport = 'mlb';
+    let sportConfigs = {};
 
-        initializeSportConfigs() {
-            return {
-                mlb: {
-                    name: 'MLB',
-                    emoji: '⚾',
-                    popularPlayers: ['Aaron Judge', 'Mookie Betts', 'Ronald Acuña Jr.', 'Shohei Ohtani', 'Mike Trout', 'Juan Soto'],
-                    fantasyScoring: {
-                        single: 1.0, double: 2.0, triple: 3.0, hr: 4.0, rbi: 1.0, run: 1.0, bb: 0.5, sb: 2.0, hbp: 0.5
-                    },
-                    statCategories: ['Batting', 'Pitching', 'Advanced Batting']
-                },
-                nba: {
-                    name: 'NBA',
-                    emoji: '🏀',
-                    popularPlayers: ['LeBron James', 'Stephen Curry', 'Luka Dončić', 'Giannis Antetokounmpo', 'Nikola Jokić', 'Jayson Tatum'],
-                    fantasyScoring: {
-                        point: 1.0, rebound: 1.2, assist: 1.5, steal: 3.0, block: 3.0, turnover: -1.0, fgm: 0.5, ftm: 0.5
-                    },
-                    statCategories: ['Scoring', 'Rebounds & Assists', 'Defense']
-                },
-                nfl: {
-                    name: 'NFL',
-                    emoji: '🏈',
-                    popularPlayers: ['Josh Allen', 'Patrick Mahomes', 'Lamar Jackson', 'Christian McCaffrey', 'Cooper Kupp', 'Travis Kelce'],
-                    fantasyScoring: {
-                        pass_yd: 0.04, pass_td: 4.0, rush_yd: 0.1, rush_td: 6.0, rec_yd: 0.1, rec_td: 6.0, reception: 1.0, int: -1.0
-                    },
-                    statCategories: ['Passing', 'Rushing', 'Receiving']
-                },
-                nhl: {
-                    name: 'NHL',
-                    emoji: '🏒',
-                    popularPlayers: ['Connor McDavid', 'Nathan MacKinnon', 'Auston Matthews', 'Leon Draisaitl', 'Erik Karlsson', 'David Pastrnak'],
-                    fantasyScoring: {
-                        goal: 3.0, assist: 2.0, powerplay_point: 0.5, shot: 0.5, hit: 0.1, block: 0.5
-                    },
-                    statCategories: ['Scoring', 'Goaltending', 'Advanced Stats']
-                },
-                soccer: {
-                    name: 'Soccer',
-                    emoji: '⚽',
-                    popularPlayers: ['Lionel Messi', 'Kylian Mbappé', 'Erling Haaland', 'Vinícius Jr.', 'Mohamed Salah', 'Kevin De Bruyne'],
-                    fantasyScoring: {
-                        goal: 4.0, assist: 3.0, clean_sheet: 1.0, save: 0.5, yellow_card: -0.5, red_card: -3.0
-                    },
-                    statCategories: ['Attack', 'Defense', 'Goalkeeping']
-                },
-                tennis: {
-                    name: 'Tennis',
-                    emoji: '🎾',
-                    popularPlayers: ['Novak Djokovic', 'Carlos Alcaraz', 'Jannik Sinner', 'Iga Świątek', 'Aryna Sabalenka', 'Coco Gauff'],
-                    fantasyScoring: {
-                        match_win: 10.0, set_win: 3.0, ace: 0.5, winner: 0.3, break_point_won: 1.0
-                    },
-                    statCategories: ['Match Stats', 'Serve Stats', 'Return Stats']
-                },
-                golf: {
-                    name: 'Golf',
-                    emoji: '⛳',
-                    popularPlayers: ['Scottie Scheffler', 'Rory McIlroy', 'Jon Rahm', 'Viktor Hovland', 'Xander Schauffele', 'Collin Morikawa'],
-                    fantasyScoring: {
-                        birdie: 3.0, eagle: 8.0, bogey: -0.5, double_bogey: -1.0, made_cut: 5.0, top_10: 5.0
-                    },
-                    statCategories: ['Scoring', 'Driving', 'Putting']
-                },
-                f1: {
-                    name: 'Formula 1',
-                    emoji: '🏎️',
-                    popularPlayers: ['Max Verstappen', 'Lewis Hamilton', 'Charles Leclerc', 'Lando Norris', 'George Russell', 'Oscar Piastri'],
-                    fantasyScoring: {
-                        position_1: 25.0, position_2: 15.0, position_3: 10.0, fastest_lap: 2.0, pole_position: 3.0
-                    },
-                    statCategories: ['Race Results', 'Qualifying', 'Season Stats']
-                },
-                cricket: {
-                    name: 'Cricket',
-                    emoji: '🏏',
-                    popularPlayers: ['Virat Kohli', 'Babar Azam', 'Kane Williamson', 'Steve Smith', 'Joe Root', 'Pat Cummins'],
-                    fantasyScoring: {
-                        run: 1.0, four: 1.0, six: 2.0, wicket: 25.0, catch: 8.0, stumping: 12.0
-                    },
-                    statCategories: ['Batting', 'Bowling', 'Fielding']
-                },
-                rugby: {
-                    name: 'Rugby',
-                    emoji: '🏉',
-                    popularPlayers: ['Antoine Dupont', 'Ardie Savea', 'Cheslin Kolbe', 'Maro Itoje', 'Johnny Sexton', 'Marcus Smith'],
-                    fantasyScoring: {
-                        try: 5.0, conversion: 2.0, penalty: 3.0, tackle: 0.2, lineout_won: 1.0
-                    },
-                    statCategories: ['Attack', 'Defense', 'Kicking']
-                },
-                basketball_intl: {
-                    name: 'International Basketball',
-                    emoji: '🌍',
-                    popularPlayers: ['Luka Dončić', 'Nikola Jokić', 'Giannis Antetokounmpo', 'Rudy Gobert', 'Dennis Schröder', 'Evan Fournier'],
-                    fantasyScoring: {
-                        point: 1.0, rebound: 1.2, assist: 1.5, steal: 3.0, block: 3.0
-                    },
-                    statCategories: ['Offense', 'Defense', 'Efficiency']
-                },
-                football_intl: {
-                    name: 'International Football',
-                    emoji: '⚽',
-                    popularPlayers: ['Kylian Mbappé', 'Erling Haaland', 'Pedri', 'Jude Bellingham', 'Florian Wirtz', 'Gavi'],
-                    fantasyScoring: {
-                        goal: 4.0, assist: 3.0, clean_sheet: 1.0, save: 0.5
-                    },
-                    statCategories: ['Attack', 'Midfield', 'Defense']
+    // Initialize sport configurations
+    function initializeSportConfigs() {
+        return {
+            mlb: {
+                name: 'MLB',
+                emoji: '⚾',
+                popularPlayers: ['Aaron Judge', 'Mookie Betts', 'Ronald Acuña Jr.', 'Shohei Ohtani', 'Mike Trout', 'Juan Soto'],
+                fantasyScoring: {
+                    single: 1.0, double: 2.0, triple: 3.0, hr: 4.0, rbi: 1.0, run: 1.0, bb: 0.5, sb: 2.0, hbp: 0.5
                 }
-            };
-        }
-
-        init() {
-            this.bindEvents();
-            this.updateSuggestions();
-        }
-
-        bindEvents() {
-            const searchBtn = document.getElementById('searchBtn');
-            const playerInput = document.getElementById('playerInput');
-            const sportTabs = document.querySelectorAll('.sport-tab');
-
-            searchBtn.addEventListener('click', () => this.searchPlayer());
-            
-            playerInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    this.searchPlayer();
+            },
+            nba: {
+                name: 'NBA',
+                emoji: '🏀',
+                popularPlayers: ['LeBron James', 'Stephen Curry', 'Luka Dončić', 'Giannis Antetokounmpo', 'Nikola Jokić', 'Jayson Tatum'],
+                fantasyScoring: {
+                    point: 1.0, rebound: 1.2, assist: 1.5, steal: 3.0, block: 3.0, turnover: -1.0
                 }
-            });
-
-            sportTabs.forEach(tab => {
-                tab.addEventListener('click', (e) => {
-                    const sport = e.target.dataset.sport;
-                    this.switchSport(sport);
-                });
-            });
-
-            // Delegate event for suggestion pills
-            document.addEventListener('click', (e) => {
-                if (e.target.classList.contains('suggestion-pill')) {
-                    const playerName = e.target.dataset.player;
-                    playerInput.value = playerName;
-                    this.searchPlayer();
+            },
+            nfl: {
+                name: 'NFL',
+                emoji: '🏈',
+                popularPlayers: ['Josh Allen', 'Patrick Mahomes', 'Lamar Jackson', 'Christian McCaffrey', 'Cooper Kupp', 'Travis Kelce'],
+                fantasyScoring: {
+                    pass_yd: 0.04, pass_td: 4.0, rush_yd: 0.1, rush_td: 6.0, rec_yd: 0.1, rec_td: 6.0
                 }
-            });
-        }
-
-        switchSport(sport) {
-            // Update active tab
-            document.querySelectorAll('.sport-tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            document.querySelector(`[data-sport="${sport}"]`).classList.add('active');
-
-            // Update current sport
-            this.currentSport = sport;
-            
-            // Update suggestions
-            this.updateSuggestions();
-            
-            // Clear results
-            document.getElementById('results').innerHTML = '';
-            
-            // Update placeholder
-            const config = this.sportConfigs[sport];
-            document.getElementById('playerInput').placeholder = `Enter ${config.name} player name...`;
-        }
-
-        updateSuggestions() {
-            const config = this.sportConfigs[this.currentSport];
-            const suggestionsTitle = document.getElementById('suggestionsTitle');
-            const suggestionPills = document.getElementById('suggestionPills');
-
-            suggestionsTitle.textContent = `Popular ${config.name} Players:`;
-            
-            suggestionPills.innerHTML = config.popularPlayers.map(player => 
-                `<span class="suggestion-pill" data-player="${player}">${player}</span>`
-            ).join('');
-        }
-
-        async searchPlayer() {
-            const playerName = document.getElementById('playerInput').value.trim();
-            const resultsDiv = document.getElementById('results');
-            const searchBtn = document.getElementById('searchBtn');
-
-            if (!playerName) {
-                this.showError('Please enter a player name');
-                return;
+            },
+            nhl: {
+                name: 'NHL',
+                emoji: '🏒',
+                popularPlayers: ['Connor McDavid', 'Nathan MacKinnon', 'Auston Matthews', 'Leon Draisaitl', 'Erik Karlsson', 'David Pastrnak'],
+                fantasyScoring: {
+                    goal: 3.0, assist: 2.0, powerplay_point: 0.5, shot: 0.5, hit: 0.1, block: 0.5
+                }
+            },
+            soccer: {
+                name: 'Soccer',
+                emoji: '⚽',
+                popularPlayers: ['Lionel Messi', 'Kylian Mbappé', 'Erling Haaland', 'Vinícius Jr.', 'Mohamed Salah', 'Kevin De Bruyne'],
+                fantasyScoring: {
+                    goal: 4.0, assist: 3.0, clean_sheet: 1.0, save: 0.5, yellow_card: -0.5, red_card: -3.0
+                }
+            },
+            tennis: {
+                name: 'Tennis',
+                emoji: '🎾',
+                popularPlayers: ['Novak Djokovic', 'Carlos Alcaraz', 'Jannik Sinner', 'Iga Świątek', 'Aryna Sabalenka', 'Coco Gauff'],
+                fantasyScoring: {
+                    match_win: 10.0, set_win: 3.0, ace: 0.5, winner: 0.3, break_point_won: 1.0
+                }
+            },
+            golf: {
+                name: 'Golf',
+                emoji: '⛳',
+                popularPlayers: ['Scottie Scheffler', 'Rory McIlroy', 'Jon Rahm', 'Viktor Hovland', 'Xander Schauffele', 'Collin Morikawa'],
+                fantasyScoring: {
+                    birdie: 3.0, eagle: 8.0, bogey: -0.5, double_bogey: -1.0, made_cut: 5.0, top_10: 5.0
+                }
+            },
+            f1: {
+                name: 'Formula 1',
+                emoji: '🏎️',
+                popularPlayers: ['Max Verstappen', 'Lewis Hamilton', 'Charles Leclerc', 'Lando Norris', 'George Russell', 'Oscar Piastri'],
+                fantasyScoring: {
+                    position_1: 25.0, position_2: 15.0, position_3: 10.0, fastest_lap: 2.0, pole_position: 3.0
+                }
+            },
+            cricket: {
+                name: 'Cricket',
+                emoji: '🏏',
+                popularPlayers: ['Virat Kohli', 'Babar Azam', 'Kane Williamson', 'Steve Smith', 'Joe Root', 'Pat Cummins'],
+                fantasyScoring: {
+                    run: 1.0, four: 1.0, six: 2.0, wicket: 25.0, catch: 8.0, stumping: 12.0
+                }
+            },
+            rugby: {
+                name: 'Rugby',
+                emoji: '🏉',
+                popularPlayers: ['Antoine Dupont', 'Ardie Savea', 'Cheslin Kolbe', 'Maro Itoje', 'Johnny Sexton', 'Marcus Smith'],
+                fantasyScoring: {
+                    try: 5.0, conversion: 2.0, penalty: 3.0, tackle: 0.2, lineout_won: 1.0
+                }
+            },
+            basketball_intl: {
+                name: 'International Basketball',
+                emoji: '🌍',
+                popularPlayers: ['Luka Dončić', 'Nikola Jokić', 'Giannis Antetokounmpo', 'Rudy Gobert', 'Dennis Schröder', 'Evan Fournier'],
+                fantasyScoring: {
+                    point: 1.0, rebound: 1.2, assist: 1.5, steal: 3.0, block: 3.0
+                }
+            },
+            football_intl: {
+                name: 'International Football',
+                emoji: '⚽',
+                popularPlayers: ['Kylian Mbappé', 'Erling Haaland', 'Pedri', 'Jude Bellingham', 'Florian Wirtz', 'Gavi'],
+                fantasyScoring: {
+                    goal: 4.0, assist: 3.0, clean_sheet: 1.0, save: 0.5
+                }
             }
+        };
+    }
 
-            // Show loading state
-            searchBtn.disabled = true;
-            searchBtn.textContent = 'Searching...';
-            resultsDiv.innerHTML = `
-                <div class="loading">
-                    <div class="spinner"></div>
-                    <p>Searching for ${playerName} in ${this.sportConfigs[this.currentSport].name}...</p>
+    // Initialize the app when page loads
+    function initializeApp() {
+        sportConfigs = initializeSportConfigs();
+        updateSuggestions();
+    }
+
+    // Switch sport function
+    function switchSport(sport) {
+        // Update active tab
+        document.querySelectorAll('.sport-tab').forEach(tab => {
+            tab.classList.remove('active');
+        });
+        document.querySelector(`[data-sport="${sport}"]`).classList.add('active');
+
+        // Update current sport
+        currentSport = sport;
+        
+        // Update suggestions
+        updateSuggestions();
+        
+        // Clear results
+        document.getElementById('results').innerHTML = '';
+        
+        // Update placeholder
+        const config = sportConfigs[sport];
+        document.getElementById('playerInput').placeholder = `Enter ${config.name} player name...`;
+    }
+
+    // Update suggestions based on current sport
+    function updateSuggestions() {
+        const config = sportConfigs[currentSport];
+        const suggestionsTitle = document.getElementById('suggestionsTitle');
+        const suggestionPills = document.getElementById('suggestionPills');
+
+        suggestionsTitle.textContent = `Popular ${config.name} Players:`;
+        
+        suggestionPills.innerHTML = config.popularPlayers.map(player => 
+            `<span class="suggestion-pill" onclick="selectPlayer('${player}')">${player}</span>`
+        ).join('');
+    }
+
+    // Select player from suggestions
+    function selectPlayer(playerName) {
+        document.getElementById('playerInput').value = playerName;
+        searchPlayer();
+    }
+
+    // Handle Enter key press
+    function handleKeyPress(event) {
+        if (event.key === 'Enter') {
+            searchPlayer();
+        }
+    }
+
+    // Main search function
+    async function searchPlayer() {
+        const playerName = document.getElementById('playerInput').value.trim();
+        const resultsDiv = document.getElementById('results');
+        const searchBtn = document.getElementById('searchBtn');
+
+        if (!playerName) {
+            showError('Please enter a player name');
+            return;
+        }
+
+        // Show loading state
+        searchBtn.disabled = true;
+        searchBtn.textContent = 'Searching...';
+        resultsDiv.innerHTML = `
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Searching for ${playerName} in ${sportConfigs[currentSport].name}...</p>
+            </div>
+        `;
+
+        try {
+            // Simulate API call
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            displayPlayerStats(getSamplePlayerData(playerName));
+        } catch (error) {
+            showError(`Error fetching player data: ${error.message}`);
+        } finally {
+            searchBtn.disabled = false;
+            searchBtn.textContent = 'Search Player';
+        }
+    }
+
+    // Generate sample player data
+    function getSamplePlayerData(playerName) {
+        const config = sportConfigs[currentSport];
+        
+        const baseData = {
+            name: playerName,
+            sport: currentSport,
+            team: getRandomTeam(),
+            position: getRandomPosition(),
+            jerseyNumber: Math.floor(Math.random() * 99) + 1,
+            age: Math.floor(Math.random() * 15) + 20,
+            height: getRandomHeight(),
+            weight: getRandomWeight()
+        };
+
+        // Add sport-specific stats
+        switch(currentSport) {
+            case 'mlb':
+                return { ...baseData, stats: getMLBStats() };
+            case 'nba':
+            case 'basketball_intl':
+                return { ...baseData, stats: getNBAStats() };
+            case 'nfl':
+                return { ...baseData, stats: getNFLStats() };
+            case 'nhl':
+                return { ...baseData, stats: getNHLStats() };
+            case 'soccer':
+            case 'football_intl':
+                return { ...baseData, stats: getSoccerStats() };
+            case 'tennis':
+                return { ...baseData, stats: getTennisStats() };
+            case 'golf':
+                return { ...baseData, stats: getGolfStats() };
+            case 'f1':
+                return { ...baseData, stats: getF1Stats() };
+            case 'cricket':
+                return { ...baseData, stats: getCricketStats() };
+            case 'rugby':
+                return { ...baseData, stats: getRugbyStats() };
+            default:
+                return { ...baseData, stats: getMLBStats() };
+        }
+    }
+
+    // Random data generators
+    function getRandomTeam() {
+        const teams = {
+            mlb: ['New York Yankees', 'Los Angeles Dodgers', 'Boston Red Sox', 'Atlanta Braves'],
+            nba: ['Los Angeles Lakers', 'Golden State Warriors', 'Miami Heat', 'Boston Celtics'],
+            nfl: ['Kansas City Chiefs', 'Buffalo Bills', 'Dallas Cowboys', 'Green Bay Packers'],
+            nhl: ['Toronto Maple Leafs', 'Montreal Canadiens', 'Boston Bruins', 'Tampa Bay Lightning'],
+            soccer: ['Manchester City', 'Real Madrid', 'Barcelona', 'Bayern Munich'],
+            tennis: ['Professional Circuit', 'ATP Tour', 'WTA Tour'],
+            golf: ['PGA Tour', 'European Tour'],
+            f1: ['Red Bull Racing', 'Mercedes', 'Ferrari', 'McLaren'],
+            cricket: ['India', 'Australia', 'England', 'Pakistan'],
+            rugby: ['France', 'New Zealand', 'South Africa', 'England'],
+            basketball_intl: ['Real Madrid', 'Barcelona', 'CSKA Moscow', 'Fenerbahçe'],
+            football_intl: ['France', 'Brazil', 'Argentina', 'Spain']
+        };
+        const teamList = teams[currentSport] || teams.mlb;
+        return teamList[Math.floor(Math.random() * teamList.length)];
+    }
+
+    function getRandomPosition() {
+        const positions = {
+            mlb: ['CF', 'RF', 'LF', 'SS', 'C', '1B', '2B', '3B', 'P'],
+            nba: ['PG', 'SG', 'SF', 'PF', 'C'],
+            nfl: ['QB', 'RB', 'WR', 'TE', 'K', 'DEF'],
+            nhl: ['C', 'LW', 'RW', 'D', 'G'],
+            soccer: ['GK', 'CB', 'FB', 'CM', 'W', 'ST'],
+            tennis: ['Singles', 'Doubles'],
+            golf: ['Professional'],
+            f1: ['Driver'],
+            cricket: ['Batsman', 'Bowler', 'All-rounder', 'Wicket-keeper'],
+            rugby: ['Forward', 'Back', 'Scrum-half', 'Fly-half'],
+            basketball_intl: ['PG', 'SG', 'SF', 'PF', 'C'],
+            football_intl: ['GK', 'CB', 'CM', 'W', 'ST']
+        };
+        const positionList = positions[currentSport] || positions.mlb;
+        return positionList[Math.floor(Math.random() * positionList.length)];
+    }
+
+    function getRandomHeight() {
+        const heights = ['5\'10"', '6\'0"', '6\'2"', '6\'4"', '6\'6"', '5\'8"', '6\'1"', '6\'3"'];
+        return heights[Math.floor(Math.random() * heights.length)];
+    }
+
+    function getRandomWeight() {
+        return `${Math.floor(Math.random() * 60) + 160} lbs`;
+    }
+
+    // Sport-specific stat generators
+    function getMLBStats() {
+        return {
+            batting: {
+                avg: ".311", hr: "37", rbi: "105", runs: "123", hits: "161",
+                doubles: "28", triples: "2", sb: "12", bb: "95", so: "123",
+                obp: ".404", slg: ".701", ops: "1.105"
+            },
+            splits: {
+                home: { avg: ".325", hr: "19", rbi: "58", obp: ".415", slg: ".728", ops: "1.143" },
+                away: { avg: ".298", hr: "18", rbi: "47", obp: ".392", slg: ".673", ops: "1.065" }
+            },
+            pitching: {
+                era: "3.45", wins: "12", losses: "8", saves: "0", ip: "165.2",
+                hits: "142", runs: "68", bb: "52", so: "189", whip: "1.17"
+            },
+            fantasyData: generateFantasyData()
+        };
+    }
+
+    function getNBAStats() {
+        return {
+            scoring: {
+                ppg: "28.4", fg_pct: ".485", three_pt_pct: ".378", ft_pct: ".891",
+                fgm: "10.2", fga: "21.0", three_pm: "3.1", three_pa: "8.2"
+            },
+            rebounds: { rpg: "8.7", orpg: "2.1", drpg: "6.6", trpg: "8.7" },
+            assists: { apg: "6.8", tpg: "3.2", apg_to_tpg: "2.1", ast_pct: "32.4" },
+            splits: {
+                home: { ppg: "30.2", rpg: "9.1", apg: "7.2", fg_pct: ".501" },
+                away: { ppg: "26.8", rpg: "8.3", apg: "6.4", fg_pct: ".468" }
+            },
+            fantasyData: generateFantasyData()
+        };
+    }
+
+    function getNFLStats() {
+        return {
+            passing: {
+                yards: "4,331", tds: "29", ints: "11", comp_pct: "67.2",
+                rating: "105.8", yards_per_attempt: "7.8"
+            },
+            rushing: { yards: "524", tds: "4", avg: "4.1", attempts: "128" },
+            receiving: { receptions: "89", yards: "1,247", tds: "12", avg: "14.0" },
+            splits: {
+                home: { yards: "2,180", tds: "16", rating: "108.2" },
+                away: { yards: "2,151", tds: "13", rating: "103.4" }
+            },
+            fantasyData: generateFantasyData()
+        };
+    }
+
+    function getNHLStats() {
+        return {
+            scoring: {
+                goals: "42", assists: "61", points: "103", plus_minus: "+28",
+                pim: "34", shots: "287", shooting_pct: "14.6"
+            },
+            advanced: { corsi_for_pct: "58.2", fenwick_for_pct: "56.8", pdo: "102.1" },
+            goaltending: {
+                wins: "32", losses: "18", ot: "4", gaa: "2.45",
+                save_pct: ".921", shutouts: "4"
+            },
+            splits: {
+                home: { goals: "23", assists: "32", points: "55", plus_minus: "+18" },
+                away: { goals: "19", assists: "29", points: "48", plus_minus: "+10" }
+            },
+            fantasyData: generateFantasyData()
+        };
+    }
+
+    function getSoccerStats() {
+        return {
+            attack: {
+                goals: "23", assists: "12", shots: "89", shots_on_target: "54",
+                key_passes: "67", big_chances_created: "18"
+            },
+            defense: {
+                tackles: "45", interceptions: "38", clearances: "52",
+                blocks: "23", clean_sheets: "12"
+            },
+            overall: {
+                appearances: "34", minutes: "2,890", yellow_cards: "4",
+                red_cards: "0", pass_accuracy: "87.3"
+            },
+            splits: {
+                home: { goals: "14", assists: "7", clean_sheets: "8" },
+                away: { goals: "9", assists: "5", clean_sheets: "4" }
+            },
+            fantasyData: generateFantasyData()
+        };
+    }
+
+    function getTennisStats() {
+        return {
+            matches: {
+                wins: "45", losses: "12", win_pct: "78.9",
+                titles: "3", finals: "5"
+            },
+            serve: {
+                aces: "456", double_faults: "89", first_serve_pct: "65.2",
+                first_serve_win_pct: "78.4", second_serve_win_pct: "54.1"
+            },
+            return: {
+                break_points_won: "89", return_games_won: "234",
+                first_return_win_pct: "32.1", second_return_win_pct: "47.8"
+            },
+            splits: {
+                home: { wins: "24", losses: "5", win_pct: "82.8" },
+                away: { wins: "21", losses: "7", win_pct: "75.0" }
+            },
+            fantasyData: generateFantasyData()
+        };
+    }
+
+    function getGolfStats() {
+        return {
+            scoring: {
+                scoring_avg: "69.8", birdies_per_round: "4.2", eagles: "12",
+                top_10s: "8", cuts_made: "18", tournaments: "22"
+            },
+            driving: {
+                driving_distance: "312.4", driving_accuracy: "67.8",
+                fairways_hit: "8.7"
+            },
+            putting: {
+                putts_per_round: "28.9", one_putts: "7.2",
+                putting_avg: "1.78", sand_saves: "54.2"
+            },
+            splits: {
+                home: { scoring_avg: "69.2", top_10s: "5" },
+                away: { scoring_avg: "70.4", top_10s: "3" }
+            },
+            fantasyData: generateFantasyData()
+        };
+    }
+
+    function getF1Stats() {
+        return {
+            race_results: {
+                wins: "8", podiums: "14", points: "389", position: "1st",
+                fastest_laps: "5", pole_positions: "7"
+            },
+            qualifying: {
+                avg_grid_position: "2.1", q3_appearances: "18",
+                front_row_starts: "12"
+            },
+            season: {
+                races: "22", dnf: "2", points_per_race: "17.7",
+                championship_position: "1st"
+            },
+            splits: {
+                home: { wins: "2", podiums: "3", avg_position: "2.0" },
+                away: { wins: "6", podiums: "11", avg_position: "2.2" }
+            },
+            fantasyData: generateFantasyData()
+        };
+    }
+
+    function getCricketStats() {
+        return {
+            batting: {
+                runs: "1,247", avg: "52.7", strike_rate: "89.4",
+                hundreds: "4", fifties: "6", highest_score: "156*"
+            },
+            bowling: {
+                wickets: "23", avg: "28.4", economy: "5.2",
+                best_figures: "4/32", five_wickets: "1"
+            },
+            fielding: { catches: "18", stumpings: "0", run_outs: "3" },
+            splits: {
+                home: { avg: "58.3", strike_rate: "91.2", wickets: "12" },
+                away: { avg: "47.1", strike_rate: "87.6", wickets: "11" }
+            },
+            fantasyData: generateFantasyData()
+        };
+    }
+
+    function getRugbyStats() {
+        return {
+            attack: {
+                tries: "8", assists: "12", meters_run: "1,247",
+                clean_breaks: "23", offloads: "34"
+            },
+            defense: {
+                tackles: "89", missed_tackles: "12", turnovers: "15",
+                lineout_wins: "45"
+            },
+            kicking: { conversions: "23/28", penalties: "18/22", points: "112" },
+            splits: {
+                home: { tries: "5", tackles: "47", points: "64" },
+                away: { tries: "3", tackles: "42", points: "48" }
+            },
+            fantasyData: generateFantasyData()
+        };
+    }
+
+    function generateFantasyData() {
+        return {
+            lastGame: {
+                date: "2024-09-04",
+                opponent: getRandomTeam(),
+                fantasyScore: (Math.random() * 20 + 5).toFixed(1)
+            },
+            upcomingOpponent: getRandomTeam(),
+            vsUpcomingOpponent: {
+                last5Games: Array.from({length: 5}, (_, i) => ({
+                    date: new Date(2024, 7, 20 - i * 3).toISOString().split('T')[0],
+                    fantasyScore: (Math.random() * 15 + 3).toFixed(1)
+                })),
+                averageScore: (Math.random() * 12 + 4).toFixed(1)
+            }
+        };
+    }
+
+    // Display player stats
+    function displayPlayerStats(playerData) {
+        const resultsDiv = document.getElementById('results');
+        const config = sportConfigs[currentSport];
+        const stats = playerData.stats;
+        const fantasyData = stats.fantasyData;
+
+        resultsDiv.innerHTML = `
+            <div class="player-card">
+                <div class="player-header">
+                    <div class="player-info">
+                        <h2>${config.emoji} ${playerData.name}</h2>
+                        <div class="player-details">
+                            <div><strong>Team:</strong> ${playerData.team}</div>
+                            <div><strong>Position:</strong> ${playerData.position}</div>
+                            <div><strong>Jersey:</strong> #${playerData.jerseyNumber}</div>
+                            <div><strong>Age:</strong> ${playerData.age}</div>
+                            <div><strong>Height:</strong> ${playerData.height}</div>
+                            <div><strong>Weight:</strong> ${playerData.weight}</div>
+                        </div>
+                    </div>
                 </div>
-            `;
 
-            try {
-                await this.simulateAPICall();
-                this.displayPlayerStats(this.getSamplePlayerData(playerName));
-            } catch (error) {
-                this.showError(`Error fetching player data: ${error.message}`);
-            } finally {
-                searchBtn.disabled = false;
-                searchBtn.textContent = 'Search Player';
-            }
+                <div class="stats-grid">
+                    ${renderSportSpecificStats(stats)}
+                </div>
+
+                <div class="splits-container">
+                    ${renderSplitStats(stats.splits)}
+                </div>
+
+                <div class="fantasy-section">
+                    <div class="fantasy-card">
+                        <div class="fantasy-header">
+                            <div class="fantasy-title">🏆 Last Game Fantasy Score</div>
+                            <div>
+                                <div class="fantasy-score">${fantasyData.lastGame.fantasyScore}</div>
+                                <div class="score-label">Points</div>
+                            </div>
+                        </div>
+                        <div class="game-info">
+                            <div class="game-date">${new Date(fantasyData.lastGame.date).toLocaleDateString()}</div>
+                            <div class="opponent">vs ${fantasyData.lastGame.opponent}</div>
+                        </div>
+                    </div>
+
+                    <div class="fantasy-card">
+                        <div class="fantasy-header">
+                            <div class="fantasy-title">📈 vs ${fantasyData.upcomingOpponent}</div>
+                            <div>
+                                <div class="fantasy-score">${fantasyData.vsUpcomingOpponent.averageScore}</div>
+                                <div class="score-label">Avg Points</div>
+                            </div>
+                        </div>
+                        <div class="recent-games">
+                            <h4>Last 5 Games vs ${fantasyData.upcomingOpponent}:</h4>
+                            <div class="game-list">
+                                ${fantasyData.vsUpcomingOpponent.last5Games.map(game => `
+                                    <div class="game-item">
+                                        <span class="game-item-date">${new Date(game.date).toLocaleDateString()}</span>
+                                        <span class="game-item-score">${game.fantasyScore} pts</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                ${renderFantasyGuide()}
+            </div>
+        `;
+    }
+
+    function renderSportSpecificStats(stats) {
+        switch(currentSport) {
+            case 'mlb':
+                return renderMLBStats(stats);
+            case 'nba':
+            case 'basketball_intl':
+                return renderNBAStats(stats);
+            case 'nfl':
+                return renderNFLStats(stats);
+            case 'nhl':
+                return renderNHLStats(stats);
+            case 'soccer':
+            case 'football_intl':
+                return renderSoccerStats(stats);
+            case 'tennis':
+                return renderTennisStats(stats);
+            case 'golf':
+                return renderGolfStats(stats);
+            case 'f1':
+                return renderF1Stats(stats);
+            case 'cricket':
+                return renderCricketStats(stats);
+            case 'rugby':
+                return renderRugbyStats(stats);
+            default:
+                return renderMLBStats(stats);
         }
+    }
 
-        async simulateAPICall() {
-            return new Promise(resolve => setTimeout(resolve, 1500));
-        }
+    function renderMLBStats(stats) {
+        return `
+            <div class="stat-category">
+                <h3>🏏 Batting Statistics</h3>
+                ${renderStatRows([
+                    ['Batting Average', stats.batting.avg],
+                    ['Home Runs', stats.batting.hr],
+                    ['RBIs', stats.batting.rbi],
+                    ['Runs', stats.batting.runs],
+                    ['Hits', stats.batting.hits],
+                    ['OPS', stats.batting.ops]
+                ])}
+            </div>
+            <div class="stat-category">
+                <h3>⚾ Pitching Statistics</h3>
+                ${renderStatRows([
+                    ['ERA', stats.pitching.era],
+                    ['Wins', stats.pitching.wins],
+                    ['Losses', stats.pitching.losses],
+                    ['Strikeouts', stats.pitching.so],
+                    ['WHIP', stats.pitching.whip]
+                ])}
+            </div>
+        `;
+    }
 
-        getSamplePlayerData(playerName) {
-            const config = this.sportConfigs[this.currentSport];
-            
-            // Generate sport-specific sample data
-            const baseData = {
-                name: playerName,
-                sport: this.currentSport,
-                team: this.getRandomTeam(),
-                position: this.getRandomPosition(),
-                jerseyNumber: Math.floor(Math.random() * 99) + 1,
-                age: Math.floor(Math.random() * 15) + 20,
-                height: this.getRandomHeight(),
-                weight: this.getRandomWeight()
-            };
+    function renderNBAStats(stats) {
+        return `
+            <div class="stat-category">
+                <h3>🏀 Scoring</h3>
+                ${renderStatRows([
+                    ['Points Per Game', stats.scoring.ppg],
+                    ['FG%', stats.scoring.fg_pct],
+                    ['3P%', stats.scoring.three_pt_pct],
+                    ['FT%', stats.scoring.ft_pct]
+                ])}
+            </div>
+            <div class="stat-category">
+                <h3>📊 All-Around</h3>
+                ${renderStatRows([
+                    ['Rebounds', stats.rebounds.rpg],
+                    ['Assists', stats.assists.apg],
+                    ['Turnovers', stats.assists.tpg]
+                ])}
+            </div>
+        `;
+    }
 
-            // Add sport-specific stats
-            switch(this.currentSport) {
-                case 'mlb':
-                    return { ...baseData, stats: this.getMLBStats() };
-                case 'nba':
-                    return { ...baseData, stats: this.getNBAStats() };
-                case 'nfl':
-                    return { ...baseData, stats: this.getNFLStats() };
-                case 'nhl':
-                    return { ...baseData, stats: this.getNHLStats() };
-                case 'soccer':
-                case 'football_intl':
-                    return { ...baseData, stats: this.getSoccerStats() };
-                case 'tennis':
-                    return { ...baseData, stats: this.getTennisStats() };
-                case 'golf':
-                    return { ...baseData, stats: this.getGolfStats() };
-                case 'f1':
-                    return { ...baseData, stats: this.getF1Stats() };
-                case 'cricket':
-                    return { ...baseData, stats: this.getCricketStats() };
-                case 'rugby':
-                    return { ...baseData, stats: this.getRugbyStats() };
-                case 'basketball_intl':
-                    return { ...baseData, stats: this.getNBAStats() }; // Similar to NBA
-                default:
-                    return { ...baseData, stats: this.getMLBStats() };
-            }
-        }
+    function renderNFLStats(stats) {
+        return `
+            <div class="stat-category">
+                <h3>🏈 Passing</h3>
+                ${renderStatRows([
+                    ['Yards', stats.passing.yards],
+                    ['TDs', stats.passing.tds],
+                    ['INTs', stats.passing.ints],
+                    ['Rating', stats.passing.rating]
+                ])}
+            </div>
+            <div class="stat-category">
+                <h3>🏃 Rushing/Receiving</h3>
+                ${renderStatRows([
+                    ['Rush Yards', stats.rushing.yards],
+                    ['Rush TDs', stats.rushing.tds],
+                    ['Receptions', stats.receiving.receptions],
+                    ['Rec Yards', stats.receiving.yards]
+                ])}
+            </div>
+        `;
+    }
 
-        getRandomTeam() {
-            const teams = {
-                mlb: ['New York Yankees', 'Los Angeles Dodgers', 'Boston Red Sox', 'Atlanta Braves'],
-                nba: ['Los Angeles Lakers', 'Golden State Warriors', 'Miami Heat', 'Boston Celtics'],
-                nfl: ['Kansas City Chiefs', 'Buffalo Bills', 'Dallas Cowboys', 'Green Bay Packers'],
-                nhl: ['Toronto Maple Leafs', 'Montreal Canadiens', 'Boston Bruins', 'Tampa Bay Lightning'],
-                soccer: ['Manchester City', 'Real Madrid', 'Barcelona', 'Bayern Munich'],
-                tennis: ['Professional Circuit', 'ATP Tour', 'WTA Tour'],
-                golf: ['PGA Tour', 'European Tour'],
-                f1: ['Red Bull Racing', 'Mercedes', 'Ferrari', 'McLaren'],
-                cricket: ['India', 'Australia', 'England', 'Pakistan'],
-                rugby: ['France', 'New Zealand', 'South Africa', 'England'],
-                basketball_intl: ['Real Madrid', 'Barcelona', 'CSKA Moscow', 'Fenerbahçe'],
-                football_intl: ['France', 'Brazil', 'Argentina', 'Spain']
-            };
-            const teamList = teams[this.currentSport] || teams.mlb;
-            return teamList[Math.floor(Math.random() * teamList.length)];
-        }
+    function renderNHLStats(stats) {
+        return `
+            <div class="stat-category">
+                <h3>🏒 Scoring</h3>
+                ${renderStatRows([
+                    ['Goals', stats.scoring.goals],
+                    ['Assists', stats.scoring.assists],
+                    ['Points', stats.scoring.points],
+                    ['+/-', stats.scoring.plus_minus]
+                ])}
+            </div>
+            <div class="stat-category">
+                <h3>🥅 Goaltending</h3>
+                ${renderStatRows([
+                    ['Wins', stats.goaltending.wins],
+                    ['GAA', stats.goaltending.gaa],
+                    ['Save%', stats.goaltending.save_pct],
+                    ['Shutouts', stats.goaltending.shutouts]
+                ])}
+            </div>
+        `;
+    }
 
-        getRandomPosition() {
-            const positions = {
-                mlb: ['CF', 'RF', 'LF', 'SS', 'C', '1B', '2B', '3B', 'P'],
-                nba: ['PG', 'SG', 'SF', 'PF', 'C'],
-                nfl: ['QB', 'RB', 'WR', 'TE', 'K', 'DEF'],
-                nhl: ['C', 'LW', 'RW', 'D', 'G'],
-                soccer: ['GK', 'CB', 'FB', 'CM', 'W', 'ST'],
-                tennis: ['Singles', 'Doubles'],
-                golf: ['Professional'],
-                f1: ['Driver'],
-                cricket: ['Bat
+    function renderSoccerStats(stats) {
+        return `
+            <div class="stat-category">
+                <h3>⚽ Attack</h3>
+                ${renderStatRows([
+                    ['Goals', stats.attack.goals],
+                    ['Assists', stats.attack.assists],
+                    ['Shots', stats.attack.shots],
+                    ['Key Passes', stats.attack.key_passes]
+                ])}
+            </div>
+            <div class="stat-category">
+                <h3>🛡️ Defense</h3>
+                ${renderStatRows([
+                    ['Tackles', stats.defense.tackles],
+                    ['Interceptions', stats.defense.interceptions],
+                    ['Clean Sheets', stats.defense.clean_sheets],
+                    ['Pass Accuracy', stats.overall.pass_accuracy + '%']
+                ])}
+            </div>
+        `;
+    }
+
+    function renderTennisStats(stats) {
+        return `
+            <div class="stat-category">
+                <h3>🎾 Match Record</h3>
+                ${renderStatRows([
+                    ['Wins', stats.matches.wins],
+                    ['Losses', stats.matches.losses],
+                    ['Win %', stats.matches.win_pct + '%'],
+                    ['Titles', stats.matches.titles]
+                ])}
+            </div>
+            <div class="stat-category">
+                <h3>🎯 Serve Stats</h3>
+                ${renderStatRows([
+                    ['Aces', stats.serve.aces],
+                    ['1st Serve %', stats.serve.first_serve_pct + '%'],
+                    ['1st Serve Win %', stats.serve.first_serve_win_pct + '%'],
+                    ['Break Points Won', stats.return.break_points_won]
+                ])}
+            </div>
+        `;
+    }
+
+    function renderGolfStats(stats) {
+        return `
+            <div class="stat-category">
+                <h3>⛳ Scoring</h3>
+                ${renderStatRows([
+                    ['Scoring Avg', stats.scoring.scoring_avg],
+                    ['Birdies/Round', stats.scoring.birdies_per_round],
+                    ['Top 10s', stats.scoring.top_10s],
+                    ['Cuts Made', stats.scoring.cuts_made]
+                ])}
+            </div>
+            <div class="stat-category">
+                <h3>🏌️ Technical</h3>
+                ${renderStatRows([
+                    ['Drive Distance', stats.driving.driving_distance + ' yds'],
+                    ['Drive Accuracy', stats.driving.driving_accuracy + '%'],
+                    ['Putts/Round', stats.putting.putts_per_round],
+                    ['Sand Save %', stats.putting.sand_saves + '%']
+                ])}
+            </div>
+        `;
+    }
+
+    function renderF1Stats(stats) {
+        return `
+            <div class="stat-category">
+                <h3>🏎️ Race Results</h3>
+                ${renderStatRows([
+                    ['Wins', stats.race_results.wins],
+                    ['Podiums', stats.race_results.podiums],
+                    ['Points', stats.race_results.points],
+                    ['Championship Pos', stats.season.championship_position]
+                ])}
+            </div>
+            <div class="stat-category">
+                <h3>🏁 Qualifying</h3>
+                ${renderStatRows([
+                    ['Pole Positions', stats.race_results.pole_positions],
+                    ['Avg Grid Pos', stats.qualifying.avg_grid_position],
+                    ['Front Row Starts', stats.qualifying.front_row_starts],
+                    ['Fastest Laps', stats.race_results.fastest_laps]
+                ])}
+            </div>
+        `;
+    }
+
+    function renderCricketStats(stats) {
+        return `
+            <div class="stat-category">
+                <h3>🏏 Batting</h3>
+                ${renderStatRows([
+                    ['Runs', stats.batting.runs],
+                    ['Average', stats.batting.avg],
+                    ['Strike Rate', stats.batting.strike_rate],
+                    ['Hundreds', stats.batting.hundreds]
+                ])}
+            </div>
+            <div class="stat-category">
+                <h3>⚾ Bowling</h3>
+                ${renderStatRows([
+                    ['Wickets', stats.bowling.wickets],
+                    ['Average', stats.bowling.avg],
+                    ['Economy', stats.bowling.economy],
+                    ['Best Figures', stats.bowling.best_figures]
+                ])}
+            </div>
+        `;
+    }
+
+    function renderRugbyStats(stats) {
+        return `
+            <div class="stat-category">
+                <h3>🏉 Attack</h3>
+                ${renderStatRows([
+                    ['Tries', stats.attack.tries],
+                    ['Assists', stats.attack.assists],
+                    ['Meters Run', stats.attack.meters_run],
+                    ['Clean Breaks', stats.attack.clean_breaks]
+                ])}
+            </div>
+            <div class="stat-category">
+                <h3>🛡️ Defense</h3>
+                ${renderStatRows([
+                    ['Tackles', stats.defense.tackles],
+                    ['Turnovers', stats.defense.turnovers],
+                    ['Lineout Wins', stats.defense.lineout_wins],
+                    ['Points', stats.kicking.points]
+                ])}
+            </div>
+        `;
+    }
+
+    function renderStatRows(statArray) {
+        return statArray.map(([label, value]) => `
+            <div class="stat-row">
+                <span class="stat-label">${label}</span>
+                <span class="stat-value">${value}</span>
+            </div>
+        `).join('');
+    }
+
+    function renderSplitStats(splits) {
+        const splitLabels = getSplitLabels();
+        
+        return `
+            <div class="split-card home">
+                <h3>🏠 ${splitLabels.home}</h3>
+                ${renderSplitData(splits.home)}
+            </div>
+            <div class="split-card away">
+                <h3>✈️ ${splitLabels.away}</h3>
+                ${renderSplitData(splits.away)}
+            </div>
+        `;
+    }
+
+    function getSplitLabels() {
+        const labels = {
+            mlb: { home: 'Home Games', away: 'Away Games' },
+            nba: { home: 'Home Games', away: 'Road Games' },
+            nfl: { home: 'Home Games', away: 'Away Games' },
+            nhl: { home: 'Home Games', away: 'Away Games' },
+            soccer: { home: 'Home Matches', away: 'Away Matches' },
+            tennis: { home: 'Home Courts', away: 'Away Courts' },
+            golf: { home: 'Domestic Tournaments', away: 'International Tournaments' },
+            f1: { home: 'Home Races', away: 'International Races' },
+            cricket: { home: 'Home Matches', away: 'Away Matches' },
+            rugby: { home: 'Home Games', away: 'Away Games' },
+            basketball_intl: { home: 'Home Games', away: 'Away Games' },
+            football_intl: { home: 'Home Matches', away: 'Away Matches' }
+        };
+        
+        return labels[currentSport] || labels.mlb;
+    }
+
+    function renderSplitData(splitData) {
+        if (!splitData) return '<div class="stat-row"><span class="stat-label">No data available</span></div>';
+        
+        return Object.entries(splitData).slice(0, 5).map(([key, value]) => `
+            <div class="stat-row">
+                <span class="stat-label">${formatStatLabel(key)}</span>
+                <span class="stat-value">${value}</span>
+            </div>
+        `).join('');
+    }
+
+    function formatStatLabel(key) {
+        const labelMap = {
+            'avg': 'Average', 'hr': 'Home Runs', 'rbi': 'RBIs', 'obp': 'On-Base %',
+            'slg': 'Slugging %', 'ops': 'OPS', 'ppg': 'Points/Game', 'rpg': 'Rebounds/Game',
+            'apg': 'Assists/Game', 'fg_pct': 'FG%', 'yards': 'Yards', 'tds': 'TDs',
+            'rating': 'Rating', 'goals': 'Goals', 'assists': 'Assists', 'points': 'Points',
+            'plus_minus': '+/-', 'clean_sheets': 'Clean Sheets', 'wins': 'Wins',
+            'win_pct': 'Win %', 'scoring_avg': 'Scoring Avg', 'top_10s': 'Top 10s'
+        };
+        
+        return labelMap[key] || key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+    }
+
+    function renderFantasyGuide() {
+        const config = sportConfigs[currentSport];
+        const scoring = config.fantasyScoring;
+
+        return `
+            <div class="fantasy-scoring-guide">
+                <div class="scoring-guide-title">${config.name} Fantasy Scoring System</div>
+                <div class="scoring-grid">
+                    ${Object.entries(scoring).map(([stat, points]) => `
+                        <div class="scoring-item">
+                            <div class="scoring-points">+${points}</div>
+                            <div>${formatStatLabel(stat)}</div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    }
+
+    function showError(message) {
+        const resultsDiv = document.getElementById('results');
+        resultsDiv.innerHTML = `
+            <div class="error">
+                <h3>⚠️ Error</h3>
+                <p>${message}</p>
+                <p><small>Note: This is a demo version with sample data. Connect to real APIs for live statistics.</small></p>
+            </div>
+        `;
+    }
+
+    // Initialize the app when DOM is loaded
+    document.addEventListener('DOMContentLoaded', initializeApp);
+</script>
 ```
+
+</body>
+</html>
