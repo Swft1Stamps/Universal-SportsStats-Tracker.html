@@ -436,11 +436,6 @@
             transition: opacity 0.3s ease;
         }
 
-        .premium-popup.show, .coming-soon-popup.show {
-            display: flex;
-            opacity: 1;
-        }
-
         .premium-popup-content {
             background: #1f2937;
             border: 2px solid #22c55e;
@@ -450,8 +445,6 @@
             width: 100%;
             text-align: center;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-            transform: scale(0.7);
-            transition: transform 0.3s ease;
         }
 
         .coming-soon-popup-content {
@@ -463,27 +456,20 @@
             width: 100%;
             text-align: center;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-            transform: scale(0.7);
-            transition: transform 0.3s ease;
         }
 
-        .premium-popup.show .premium-popup-content,
-        .coming-soon-popup.show .coming-soon-popup-content {
-            transform: scale(1);
+        .premium-popup h3, .coming-soon-popup h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 16px;
         }
 
         .premium-popup h3 {
             color: #22c55e;
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 16px;
         }
 
         .coming-soon-popup h3 {
             color: #f59e0b;
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 16px;
         }
 
         .premium-popup p, .coming-soon-popup p {
@@ -492,14 +478,21 @@
             line-height: 1.5;
         }
 
-        .countdown-highlight {
+        .price-highlight, .countdown-highlight {
             font-size: 2rem;
             font-weight: 800;
-            color: #f59e0b;
             margin: 16px 0;
         }
 
-        .countdown-subtext {
+        .price-highlight {
+            color: #22c55e;
+        }
+
+        .countdown-highlight {
+            color: #f59e0b;
+        }
+
+        .price-subtext {
             font-size: 0.9rem;
             color: #94a3b8;
             margin-bottom: 24px;
@@ -519,7 +512,15 @@
             align-items: center;
         }
 
-        .features-list li::before {
+        .premium-popup .features-list li::before {
+            content: "✓";
+            color: #22c55e;
+            font-weight: bold;
+            margin-right: 12px;
+            font-size: 1rem;
+        }
+
+        .coming-soon-popup .features-list li::before {
             content: "✓";
             color: #f59e0b;
             font-weight: bold;
@@ -527,7 +528,7 @@
             font-size: 1rem;
         }
 
-        .premium-popup-buttons, .coming-soon-buttons {
+        .premium-popup-buttons {
             display: flex;
             gap: 12px;
         }
@@ -544,11 +545,22 @@
         }
 
         .popup-btn-primary {
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
             color: white;
         }
 
         .popup-btn-primary:hover {
+            background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(34, 197, 94, 0.3);
+        }
+
+        .popup-btn-orange {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+        }
+
+        .popup-btn-orange:hover {
             background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(245, 158, 11, 0.3);
@@ -684,12 +696,13 @@
             </div>
         </div>
 
-        <!-- TESTING ONLY - Remove before production -->
+        <!-- TESTING ONLY - Uncomment for development, keep commented in production
         <div style="text-align: center; margin: 20px 0;">
             <button onclick="resetApp()" style="background: #ef4444; color: white; padding: 12px 24px; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer;">
                 Reset Test Data
             </button>
         </div>
+        -->
 
         <div class="main-content">
             <div class="form-section">
@@ -831,10 +844,9 @@
         <div id="comingSoonPopup" class="coming-soon-popup">
             <div class="coming-soon-popup-content">
                 <h3>Premium Features Coming Soon!</h3>
-                <p>We're putting the final touches on Sliply Premium. Get ready for these exciting features!</p>
+                <p>We're putting the final touches on our premium offering. Get ready for enhanced betting tracking!</p>
                 
                 <div class="countdown-highlight">2 Days</div>
-                <div class="countdown-subtext">Premium access will be available soon!</div>
                 
                 <ul class="features-list">
                     <li>Game time tracking</li>
@@ -845,8 +857,8 @@
                     <li>Priority customer support</li>
                 </ul>
                 
-                <div class="coming-soon-buttons">
-                    <button class="popup-btn popup-btn-primary" onclick="closeComingSoonPopup()">Got It!</button>
+                <div class="premium-popup-buttons">
+                    <button class="popup-btn popup-btn-orange" onclick="closeComingSoonPopup()">Got It!</button>
                 </div>
             </div>
         </div>
@@ -856,14 +868,17 @@
     <div id="toastContainer"></div>
 
     <script>
-        // Use environment variable in production
+        /* Commented out for now - Stripe integration preserved for future use
         const stripe = Stripe('pk_test_YOUR_PUBLISHABLE_KEY_HERE');
-        
+        */
+
         class BettingTracker {
             constructor() {
                 this.bets = this.loadBets();
-                this.currentFilter = 'all';
-                this.currentSort = 'date-desc';
+                // Load filter and sort from URL params or localStorage
+                const urlParams = new URLSearchParams(window.location.search);
+                this.currentFilter = urlParams.get('filter') || localStorage.getItem('sliply_filter') || 'all';
+                this.currentSort = urlParams.get('sort') || localStorage.getItem('sliply_sort') || 'date-desc';
                 this.isPremium = this.checkPremiumStatus();
                 this.init();
             }
@@ -873,6 +888,8 @@
                 this.displayBets();
                 this.updateStats();
                 this.updatePremiumUI();
+                // Set active filter and sort buttons based on loaded state
+                this.updateFilterSortUI();
             }
 
             checkPremiumStatus() {
@@ -891,9 +908,24 @@
                 }
             }
 
+            updateFilterSortUI() {
+                document.querySelectorAll('.filter-btn').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.filter === this.currentFilter);
+                });
+                document.querySelectorAll('.sort-btn').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.sort === this.currentSort);
+                });
+            }
+
             setupEventListeners() {
                 document.getElementById('betForm').addEventListener('submit', (e) => this.handleSubmit(e));
-                document.getElementById('searchInput').addEventListener('input', (e) => this.handleSearch(e));
+                
+                // Debounce search input
+                let searchTimeout;
+                document.getElementById('searchInput').addEventListener('input', (e) => {
+                    clearTimeout(searchTimeout);
+                    searchTimeout = setTimeout(() => this.handleSearch(e), 300);
+                });
                 
                 document.querySelectorAll('.filter-btn').forEach(btn => {
                     btn.addEventListener('click', (e) => this.handleFilter(e));
@@ -973,6 +1005,9 @@
                 e.target.classList.add('active');
                 
                 this.currentFilter = e.target.dataset.filter;
+                localStorage.setItem('sliply_filter', this.currentFilter);
+                // Update URL
+                window.history.replaceState({}, '', `?filter=${this.currentFilter}&sort=${this.currentSort}`);
                 this.displayBets();
             }
             
@@ -981,10 +1016,13 @@
                 e.target.classList.add('active');
                 
                 this.currentSort = e.target.dataset.sort;
+                localStorage.setItem('sliply_sort', this.currentSort);
+                // Update URL
+                window.history.replaceState({}, '', `?filter=${this.currentFilter}&sort=${this.currentSort}`);
                 this.displayBets();
             }
 
-            displayBets(searchQuery = '') {
+            displayBets(searchQuery = document.getElementById('searchInput').value.toLowerCase()) {
                 const container = document.getElementById('notesContainer');
                 let filteredBets = this.bets;
 
@@ -1113,40 +1151,41 @@
         }
 
         function showPremiumPopup() {
-            const premiumPopup = document.getElementById('premiumPopup');
-            premiumPopup.style.display = 'flex';
-            setTimeout(() => premiumPopup.classList.add('show'), 10);
+            const popup = document.getElementById('premiumPopup');
+            popup.style.display = 'flex';
+            setTimeout(() => {
+                popup.style.opacity = '1';
+            }, 10);
         }
 
-        function closePremiumPopup() {
-            const premiumPopup = document.getElementById('premiumPopup');
-            premiumPopup.classList.remove('show');
+        function closePremiumPopup(callback) {
+            const popup = document.getElementById('premiumPopup');
+            popup.style.opacity = '0';
             setTimeout(() => {
-                premiumPopup.style.display = 'none';
+                popup.style.display = 'none';
+                if (callback) callback();
             }, 300);
         }
 
         function showComingSoonPopup() {
-            const premiumPopup = document.getElementById('premiumPopup');
-            const comingSoonPopup = document.getElementById('comingSoonPopup');
-            
-            premiumPopup.classList.remove('show');
-            setTimeout(() => {
-                premiumPopup.style.display = 'none';
-                comingSoonPopup.style.display = 'flex';
-                setTimeout(() => comingSoonPopup.classList.add('show'), 10);
-            }, 300);
+            closePremiumPopup(() => {
+                const popup = document.getElementById('comingSoonPopup');
+                popup.style.display = 'flex';
+                setTimeout(() => {
+                    popup.style.opacity = '1';
+                }, 10);
+            });
         }
 
         function closeComingSoonPopup() {
-            const comingSoonPopup = document.getElementById('comingSoonPopup');
-            comingSoonPopup.classList.remove('show');
+            const popup = document.getElementById('comingSoonPopup');
+            popup.style.opacity = '0';
             setTimeout(() => {
-                comingSoonPopup.style.display = 'none';
+                popup.style.display = 'none';
             }, 300);
         }
 
-        /*
+        /* Commented out for now - Stripe integration preserved for future use
         async function upgradeToStripe() {
             try {
                 // In production, this would call your backend
@@ -1191,15 +1230,16 @@
             tracker.clearForm();
         }
 
-        const tracker = new BettingTracker();
-        checkPaymentSuccess();
-
-        // TESTING ONLY - Remove before production
+        /* TESTING ONLY - Uncomment for development, keep commented in production
         function resetApp() {
             localStorage.clear();
             alert('App reset! Reloading...');
             location.reload();
         }
+        */
+
+        const tracker = new BettingTracker();
+        checkPaymentSuccess();
     </script>
 </body>
 </html>
